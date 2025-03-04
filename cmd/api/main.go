@@ -1,13 +1,19 @@
 package models
- type Event struct{
-	Id string
-	Name string
-	Location string 
-	Date string
-	createdAt string
-	UpdatedAt string
 
- }
-  type EventRepository struct {
+import ("context"
+"time" )
 
-  }
+type Event struct {
+	Id        string
+	Name      string
+	Location  string
+	Date      time.Time
+	createdAt time.Time
+	UpdatedAt time.Time
+}
+type EventRepository interface {
+	GetMany(ctx context.Context) ([]*Event, error)
+	GetOne(ctx context.Context, eventId string) (*Event, error)
+	CreateOne(ctx context.Context, event Event) (*Event, error)
+
+}
