@@ -1,19 +1,18 @@
-package models
+package main
 
-import ("context"
-"time" )
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/kekubhai/zyntic/handlers"
+	"github.com/kekubhai/zyntic/repositories"
+)
 
-type Event struct {
-	Id        string
-	Name      string
-	Location  string
-	Date      time.Time
-	createdAt time.Time
-	UpdatedAt time.Time
-}
-type EventRepository interface {
-	GetMany(ctx context.Context) ([]*Event, error)
-	GetOne(ctx context.Context, eventId string) (*Event, error)
-	CreateOne(ctx context.Context, event Event) (*Event, error)
-
+func main() {
+	app := fiber.New(fiber.Config{
+		AppName:      "Zyntic",
+		ServerHeader: "Fiber",
+	})
+	eventRepository = repositories.NewEventRepository(nil)
+	server := app.Group("/api")
+	handlers.NewEventHandlers(server.Group("/event"), eventRepository)
+	app.Listen(":3000")
 }
