@@ -11,8 +11,8 @@ func main() {
 		AppName:      "Zyntic",
 		ServerHeader: "Fiber",
 	})
-	eventRepository = repositories.NewEventRepository(nil)
+	eventRepository := repositories.NewEventRepositories(nil)
 	server := app.Group("/api")
-	handlers.NewEventHandlers(server.Group("/event"), eventRepository)
+	handlers.NewEventHandler(server.Group("/event"), eventRepository)
 	app.Listen(":3000")
 }

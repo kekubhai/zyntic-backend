@@ -35,7 +35,7 @@ func (h *EventHandler) CreateOne(ctx *fiber.Ctx) error {
 	return nil
 }
 
-func NewEventHandlers(router fiber.Router, repository models.EventRepository) {
+func NewEventHandler(router fiber.Router, repository models.EventRepository) {
 	handler := &EventHandler{
 		repository: repository,
 	}
