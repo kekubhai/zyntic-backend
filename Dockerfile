@@ -1,22 +1,27 @@
-FROM golang:1.21-alpine
+FROM golang:1.23.5-alpine
 
-WORKDIR /src/app
+WORKDIR /app
 
 # Install build dependencies
-RUN apk add --no-cache git make
+RUN apk add --no-cache git make curl
 
-# Copy the entire application including vendor directory
+# Set environment variables for Go
+ENV GO111MODULE=on
+ENV GOPROXY=https://proxy.golang.org,direct
+
+# Copy Go module files first for better caching
+COPY go.mod go.sum* ./
+
+# Update go.mod to use Go 1.21
+RUN go mod edit -go=1.21
+
+# Copy the rest of the application
 COPY . .
 
-# No need to run go mod download since we're using the vendor directory
-
-# Install Air for hot reload (without depending on go mod)
-RUN go install github.com/cosmtrek/air@latest
-
-# Build the application using vendored dependencies
-RUN go build -mod=vendor -o ./bin/main ./cmd/api/main.go
+# Build the application directly (don't install Air)
+RUN go build -v -o ./bin/main ./cmd/api/main.go
 
 EXPOSE 3000
 
-# Use Air for hot reloading during development
-CMD ["air", "-c", ".air.toml"]
+# Run the application directly without Air
+CMD ["./bin/main"]
