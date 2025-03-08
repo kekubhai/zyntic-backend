@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/kekubhai/zyntic/config"
 	"github.com/kekubhai/zyntic/db"
@@ -15,8 +17,8 @@ func main() {
 		AppName:      "Zyntic",
 		ServerHeader: "Fiber",
 	})
-	eventRepository := repositories.NewEventRepositories(nil)
+	eventRepository := repositories.NewEventRepository(db)
 	server := app.Group("/api")
 	handlers.NewEventHandler(server.Group("/event"), eventRepository)
-	app.Listen(":3000")
+	app.Listen(fmt.Sprintf(":" +envConfig.ServerPort))
 }
