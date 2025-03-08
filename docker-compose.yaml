@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+app:
+  tty: true #keep the container running 
+  restart: always
+  image: zyntic
+  container_name: zyntic
+  build: .
+  ports:
+    - "3000:3000"
+  env_file:
+    - .env
+  networks:
+   -application
+  depends_on:
+    db:
+      condition: service_healthy
+
+  volumes:
+    - .:src/app
+
+  command: air -c .air.toml  
+  
+  
+  db:
+    image: posgres:alpine
+    container_name: zyntic_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+      
+

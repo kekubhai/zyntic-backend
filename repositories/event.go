@@ -4,23 +4,25 @@ import (
 	"context"
 	"time"
 
-	models "github.com/kekubhai/zyntic/cmd/api"
+	"github.com/kekubhai/zyntic/models"
 )
 
 type EventRepository struct {
 	db any
 }
 
+
 func (r *EventRepository) GetMany(ctx context.Context) ([]*models.Event, error) {
 	events := []*models.Event{}
 	events = append(events, &models.Event{
-		Id:        "j48489893838334484",
+		ID:        "j48489893838334484",
 		Name:      "Anirban",
 		Location:  "Kolkata",
 		Date:      time.Now(),
-		createdAt: time.Now(),
+		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	})
+	return events, nil
 }
 func (r *EventRepository) GetOne(ctx context.Context, eventId string) (*models.Event, error) {
 	return nil, nil
