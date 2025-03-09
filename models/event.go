@@ -27,7 +27,7 @@ type EventRepository interface {
 }
 
 func (e *Event) AfterFind(db *gorm.DB) (err error) {
-	baseQuery := db
+	baseQuery := db.Model(&Ticket{}).Where(&Ticket{EventID: e.ID})
 
 	if res := baseQuery.Count(&e.TotalTicketsPurchased); res.Error != nil {
 		return res.Error
