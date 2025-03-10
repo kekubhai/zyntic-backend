@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install build dependencies
 RUN apk add --no-cache git make curl
-
+RUN go install github.com/cosmtrek/air@latest
 # Set environment variables for Go
 ENV GO111MODULE=on
 ENV GOPROXY=https://proxy.golang.org,direct
