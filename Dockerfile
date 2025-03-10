@@ -4,7 +4,13 @@ WORKDIR /app
 
 # Install build dependencies
 RUN apk add --no-cache git make curl
-RUN go install github.com/cosmtrek/air@latest
+
+# Download pre-built Air binary
+RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b /usr/local/bin
+
+# Ensure /usr/local/bin is in PATH
+ENV PATH="/usr/local/bin:${PATH}"
+
 # Set environment variables for Go
 ENV GO111MODULE=on
 ENV GOPROXY=https://proxy.golang.org,direct
@@ -18,10 +24,10 @@ RUN go mod edit -go=1.21
 # Copy the rest of the application
 COPY . .
 
-# Build the application directly (don't install Air)
-RUN go build -v -o ./bin/main ./cmd/api/main.go
+# Build the application
+RUN go build -v -o ./bin/main ./...
 
 EXPOSE 3000
 
-# Run the application directly without Air
-CMD ["./bin/main"]
+# Use Air for hot reloading
+CMD ["air", "-c", ".air.toml"]
